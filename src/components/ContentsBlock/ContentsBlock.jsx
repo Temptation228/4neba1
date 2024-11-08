@@ -1,12 +1,16 @@
 import style from './contentsblock.module.css'
 
 import { useNavigate } from 'react-router-dom'
-import {useDispatch} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
+import { addToTotalPrice, subtractFromTotalPrice } from '../../actions/Actions';
 
 export const ContentBlock = ({el}) => {
     const baseUrl = process.env.REACT_APP_BACKEND
     
     const dispatch = useDispatch();
+
+    const totalPrice = useSelector((state) => state.totalPrice); 
+
     const navigate = useNavigate()
 
     const onAdd = () => {
@@ -16,7 +20,7 @@ export const ContentBlock = ({el}) => {
     const onDelete = () => {
         dispatch({ type: 'REMOVE_FROM_QUEUE', payload: el.id });
     };
-
+    
     return (
         <div className={style.contentBlockDiv}>
             <div className={style.image}>
@@ -31,11 +35,17 @@ export const ContentBlock = ({el}) => {
                 <font className={style.param}>{el.somethingelse}</font>
             </div>
             <div className={style.description}>{el.description}</div>
-            {el.id 
+            {el.id
                 ? <button onClick={() => navigate(`/content/${el.id}`)}> Подробнее </button>
-                : queue.some(item => item.id === el.id) 
-                    ? <button onClick={() => onDelete(el.id)}>Убрать из очереди</button>
-                    : <button onClick={() => onAdd(el)}>Добавить в очередь</button>
+                : queue.some((item) => item.id === el.id)
+                    ? <button onClick={() => {
+                        onDelete(el.id);
+                        dispatch(subtractFromTotalPrice(el.price));
+                    }}>Убрать из очереди</button>
+                    : <button onClick={() => {
+                        onAdd(el);
+                        dispatch(addToTotalPrice(el.price));
+                    }}>Добавить в очередь</button>
             }
         </div>
     )
