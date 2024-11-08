@@ -32,7 +32,7 @@ export const QueuePage = () => {
 
     return (
         <div className={style.queuePage}>
-            {queue.map(el => (
+            { queue ?? queue.map(el => (
                 <ContentBlock el={el} />
             ))}
             <p>{totalPrice}</p>

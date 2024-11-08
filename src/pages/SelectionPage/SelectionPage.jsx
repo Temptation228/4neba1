@@ -12,7 +12,7 @@ export const SelectionPage = ({ data }) => {
 
     return (
         <div className={style.selectionPage}>
-            {data.map((el) => (
+            {data ?? data.map((el) => (
                 <div
                     key={el.id}
                     className={`${style.deviceItem} ${el.status === 'open' ? '' : style.disabled}`}

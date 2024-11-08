@@ -58,7 +58,7 @@ function App() {
         <Header />
         <Routes>
           <Route path="/selection/" element={<SelectionPage data={data} />}/>
-          {data.map((el) => (
+          {data ?? data.map((el) => (
             <Route path={"/vr/" + el.id} element={<MainPage />} />
           ))}
           <Route path="/content/:id" element={<ContentDescriptionPage />} />
